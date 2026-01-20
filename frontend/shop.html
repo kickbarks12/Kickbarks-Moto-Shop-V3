@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Shop</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">Kickbarks Moto Shop</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/shop.html">Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./cart.html">Cart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./checkout.html">
+                Checkout <span class="badge bg-danger" id="cartCount">0</span>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact.html">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login.html">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile.html">Profile</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div
+      id="loader"
+      class="position-fixed top-0 start-0 w-100 h-100 d-none d-flex justify-content-center align-items-center"
+      style="background: rgba(255, 255, 255, 0.7); z-index: 9999"
+    >
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div class="container mt-4">
+      <h2>Shop</h2>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="searchInput"
+            class="form-control"
+            placeholder="Search products..."
+          />
+        </div>
+
+        <div class="col-md-6">
+          <select id="priceFilter" class="form-select">
+            <option value="">Sort by price</option>
+            <option value="low">Low to High</option>
+            <option value="high">High to Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" id="productList"></div>
+    </div>
+    <!-- TOAST -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="toast" class="toast">
+        <div class="toast-body" id="toastBody"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/ui.js"></script>
+  </body>
+</html>
