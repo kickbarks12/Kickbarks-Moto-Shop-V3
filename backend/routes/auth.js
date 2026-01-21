@@ -1,46 +1,31 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+
 const router = express.Router();
-
-
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+  const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: "All fields required" });
-    }
+  const hashed = await bcrypt.hash(password, 10);
+  console.log("SIGNUP PLAIN:", password);
+  console.log("SIGNUP HASH:", hashed);
 
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.status(400).json({ error: "Email already registered" });
-    }
+  const user = await User.create({
+    name,
+    email,
+    password: hashed,
+    vouchers: 100
+  });
 
-    const hashed = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
-      name,
-      email,
-      password: hashed,
-      vouchers: 100
-    });
-
-    req.session.userId = user._id;
-    res.json({ success: true });
-  } catch (err) {
-    console.error("SIGNUP ERROR:", err);
-    res.status(500).json({ error: "Signup failed" });
-  }
+  req.session.userId = user._id;
+  res.json({ success: true });
 });
 
 
 // LOGIN
 router.post("/login", async (req, res) => {
-  console.log("LOGIN ROUTE HIT", req.body);
-
   try {
     const { email, password } = req.body;
 
@@ -63,10 +48,12 @@ router.post("/login", async (req, res) => {
 });
 
 
+
 // LOGOUT
-router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.json({ success: true });
+router.post("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.json({ success: true });
+  });
 });
 
 module.exports = router;

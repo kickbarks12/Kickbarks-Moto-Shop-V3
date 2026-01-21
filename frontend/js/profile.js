@@ -1,10 +1,49 @@
+// fetch("/api/users/me", { credentials: "include" })
+//   .then(res => {
+//     if (!res.ok) {
+//       window.location.href = "/login.html";
+//       return null;
+//     }
+//     return res.json();
+//   })
+//   .then(user => {
+//     if (!user) return;
+
+//    const nameEl = document.getElementById("profileName");
+//     const emailEl = document.getElementById("profileEmail");
+//     const voucherEl = document.getElementById("profileVouchers");
+
+//     if (nameEl) nameEl.innerText = user.name || "—";
+//     if (emailEl) emailEl.innerText = user.email;
+//     if (voucherEl) voucherEl.innerText = user.vouchers || 0;
+//   });
+document.addEventListener("DOMContentLoaded", () => {
 fetch("/api/users/me", { credentials: "include" })
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) {
+      window.location.href = "/login.html";
+      return null;
+    }
+    return res.json();
+  })
   .then(user => {
-    name.innerText = user.name;
-    email.innerText = user.email;
-    vouchers.innerText = user.vouchers;
+    if (!user) return;
+
+    // Profile fields
+    document.getElementById("welcomeName").innerText = user.name;
+    const nameEl = document.getElementById("profileName");
+    const emailEl = document.getElementById("profileEmail");
+    const voucherEl = document.getElementById("profileVouchers");
+
+    console.log("PROFILE USER:", user);
+      console.log("NAME ELEMENT:", nameEl);
+
+    if (nameEl) nameEl.innerText = user.name;
+    if (emailEl) emailEl.innerText = user.email;
+    if (voucherEl) voucherEl.innerText = user.vouchers;
   });
+})
+
 
 fetch("/api/orders", { credentials: "include" })
   .then(res => res.json())

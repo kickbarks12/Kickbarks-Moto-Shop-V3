@@ -14,7 +14,7 @@ fetch(`/api/products/${id}`)
     document.getElementById("image").src = p.image;
     document.getElementById("desc").innerText = p.description;
     document.getElementById("price").innerText = p.price;
-    document.getElementById("addBtn").disabled = false;
+    // document.getElementById("addBtn").disabled = false;
 
     renderReviews(p.reviews || []);
   });

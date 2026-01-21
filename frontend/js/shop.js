@@ -55,7 +55,7 @@ function renderProducts(products) {
 
 </div>
 
-            Add to Cart
+            
           </button>
         </div>
       </div>
