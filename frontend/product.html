@@ -43,10 +43,10 @@
             <li class="nav-item">
               <a class="nav-link" href="/contact.html">Contact</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="nav-login">
               <a class="nav-link" href="/login.html">Login</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item d-none" id="nav-profile">
               <a class="nav-link" href="/profile.html">Profile</a>
             </li>
           </ul>
@@ -65,31 +65,6 @@
 
       <button onclick="add(product._id)">Add to Cart</button>
 
-      <hr />
-
-      <h4>Reviews</h4>
-      <div id="reviews"></div>
-
-      <h5 class="mt-3">Leave a review</h5>
-
-      <select id="rating" class="form-select mb-2">
-        <option value="5">★★★★★</option>
-        <option value="4">★★★★</option>
-        <option value="3">★★★</option>
-        <option value="2">★★</option>
-        <option value="1">★</option>
-      </select>
-
-      <textarea
-        id="comment"
-        class="form-control mb-2"
-        placeholder="Write your review..."
-      ></textarea>
-
-      <button class="btn btn-success" onclick="submitReview()">
-        Submit Review
-      </button>
-    </div>
     <div
       id="toast"
       style="
@@ -106,5 +81,7 @@
     ></div>
     <script src="/js/ui.js"></script>
     <script src="/js/product.js"></script>
+    <script src="/js/navbar.js"></script>
+
   </body>
 </html>

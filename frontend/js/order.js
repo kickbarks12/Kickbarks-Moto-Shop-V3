@@ -1,6 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
+
 fetch(`/api/orders/${id}`, { credentials: "include" })
   .then(res => res.json())
   .then(order => {

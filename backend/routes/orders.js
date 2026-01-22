@@ -3,9 +3,9 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const router = express.Router();
 
-
 router.post("/", async (req, res) => {
   try {
+    // 1️⃣ Auth check
     if (!req.session.userId) {
       return res.status(401).json({ error: "Not logged in" });
     }
@@ -16,53 +16,35 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "No items" });
     }
 
+    // 2️⃣ Load user
     const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
 
-        const subtotal = items.reduce((sum, item) => {
+    // 3️⃣ Calculate subtotal
+    const subtotal = items.reduce((sum, item) => {
       const price = Number(item.price) || 0;
       const qty = Number(item.qty) || 1;
       return sum + price * qty;
     }, 0);
 
-//     await Order.create({
-//       user: req.session.userId,
-//       items,
-//       total,
-//       status: "Processing",
-//       date: new Date()
-//     });
+    // ✅ FIX: define finalTotal
+    const finalTotal = subtotal;
 
-//     res.json({ success: true });
-//   } catch (err) {
-//     console.error("ORDER ERROR:", err);
-//     res.status(500).json({ error: "Order failed" });
-//   }
-// });
-
-
-// router.post("/", async (req, res) => {
-//   try {
-//     if (!req.session.userId) {
-//       return res.status(401).json({ error: "Not logged in" });
-//     }
-
-//     const items = req.body.items;
-
-//     if (!Array.isArray(items) || items.length === 0) {
-//       return res.status(400).json({ error: "Cart is empty" });
-//     }
-
+    // 4️⃣ Create order
     const order = await Order.create({
       userId: user._id,
       items,
       total: finalTotal,
-      status: "Pending"
+      status: "Pending",
+      date: new Date()
     });
 
     res.json({
+      success: true,
       order,
-      finalTotal,
-      
+      finalTotal
     });
   } catch (err) {
     console.error("ORDER ERROR:", err);
@@ -70,13 +52,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-
-
+// GET USER ORDERS
 router.get("/", async (req, res) => {
   if (!req.session.userId) return res.status(401).end();
   res.json(await Order.find({ userId: req.session.userId }));
 });
 
+// GET SINGLE ORDER
 router.get("/:id", async (req, res) => {
   if (!req.session.userId) return res.status(401).end();
 
@@ -90,8 +72,10 @@ router.get("/:id", async (req, res) => {
   res.json(order);
 });
 
-
-// module.exports = router;
-
-
 module.exports = router;
+
+
+
+
+
+

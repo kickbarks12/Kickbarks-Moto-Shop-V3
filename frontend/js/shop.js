@@ -31,10 +31,9 @@ function renderProducts(products) {
               ${p.name}
             </a>
           </h5>
-          <p>
-  ${"★".repeat(Math.round(p.ratingAvg || 0))}
-  ${"☆".repeat(5 - Math.round(p.ratingAvg || 0))}
-  <small>(${p.ratingCount || 0})</small>
+          
+<p class="fw-bold text-success fs-5">
+  ₱${p.price}
 </p>
 
           <div class="card-body">
@@ -85,18 +84,7 @@ priceFilter.addEventListener("change", () => {
   renderProducts(sorted);
 });
 
-function toggleWishlist(productId) {
-  fetch(`/api/users/wishlist/${productId}`, {
-    method: "POST",
-    credentials: "include"
-  })
-  .then(res => {
-    if (res.status === 401) {
-      alert("Please login to use wishlist");
-      location.href = "/login.html";
-    }
-  });
-}
+
 function toggleWishlist(productId) {
   fetch(`/api/users/wishlist/${productId}`, {
     method: "POST",

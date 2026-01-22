@@ -8,6 +8,7 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,8 +20,8 @@ app.use(
   })
 );
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, "../frontend")));
+
+
 
 // API routes
 app.use("/api/auth", require("./routes/auth"));
@@ -28,10 +29,15 @@ app.use("/api/products", require("./routes/products"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/users"));
 
+
+// Serve frontend
+app.use(express.static(path.join(__dirname, "../frontend")));
+
 // Root = homepage
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
+
 
 // MongoDB
 mongoose.connect(process.env.MONGO_URI)

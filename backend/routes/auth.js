@@ -40,6 +40,7 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.userId = user._id;
+    
     res.json({ success: true });
   } catch (err) {
     console.error("LOGIN ERROR:", err);

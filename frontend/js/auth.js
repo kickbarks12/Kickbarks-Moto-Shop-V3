@@ -15,7 +15,9 @@
 //     });
 // }
 
-function signup() {
+function signup(e) {
+  e.preventDefault();
+
   const nameInput = document.getElementById("name");
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
@@ -32,8 +34,8 @@ function signup() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.error) {
-        alert(data.error);
+      if (data.error || data.msg) {
+        alert(data.error || data.msg);
         return;
       }
       window.location.href = "profile.html";
@@ -44,15 +46,19 @@ function signup() {
     });
 }
 
+function login(e) {
+  e.preventDefault();
 
-function login() {
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+
   fetch("http://localhost:4000/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
-      email: email.value,
-      password: password.value
+      email: emailInput.value,
+      password: passwordInput.value
     })
   })
     .then(res => {
@@ -61,8 +67,12 @@ function login() {
       }
       return res.json();
     })
-    .then(() => {
-      location.href = "/profile.html";
+    .then(data => {
+      // store token IF backend sends one
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+      window.location.href = "/profile.html";
     })
     .catch(err => {
       alert(err.message);

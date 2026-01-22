@@ -40,48 +40,5 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// ADD REVIEW
-router.post("/:id/reviews", async (req, res) => {
-  if (!req.session.userId) return res.status(401).end();
-
-  const product = await Product.findById(req.params.id);
-  if (!product) return res.status(404).end();
-
-  const existing = product.reviews.find(
-    r => r.userId.toString() === req.session.userId
-  );
-
-  if (existing) {
-    // UPDATE REVIEW
-    existing.rating = req.body.rating;
-    existing.comment = req.body.comment;
-    existing.date = new Date();
-  } else {
-    // ADD REVIEW
-    product.reviews.push({
-      userId: req.session.userId,
-      userName: req.body.userName,
-      rating: req.body.rating,
-      comment: req.body.comment
-    });
-  }
-
-  await product.save();
-  res.json(product.reviews);
-});
-
-router.delete("/:id/reviews", async (req, res) => {
-  if (!req.session.userId) return res.status(401).end();
-
-  const product = await Product.findById(req.params.id);
-  if (!product) return res.status(404).end();
-
-  product.reviews = product.reviews.filter(
-    r => r.userId.toString() !== req.session.userId
-  );
-
-  await product.save();
-  res.json(product.reviews);
-});
 
 module.exports = router;

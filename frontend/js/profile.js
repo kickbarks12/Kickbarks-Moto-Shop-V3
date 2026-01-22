@@ -75,9 +75,19 @@ fetch("/api/orders", { credentials: "include" })
 
 
 function logout() {
-  fetch("/api/auth/logout", { credentials: "include" })
-    .then(() => location.href = "/login.html");
+  fetch("/api/auth/logout", {
+    method: "POST",
+    credentials: "include"
+  })
+    .then(() => {
+      // Force reload / redirect so navbar updates
+      window.location.href = "/index.html";
+    })
+    .catch(err => {
+      console.error("Logout failed", err);
+    });
 }
+
 fetch("/api/users/wishlist", { credentials: "include" })
   .then(res => res.json())
   .then(items => {
