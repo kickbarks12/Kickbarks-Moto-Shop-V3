@@ -78,3 +78,25 @@ function login(e) {
       alert(err.message);
     });
 }
+function requestReset(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+
+  fetch("/api/auth/forgot-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    })
+    .then(() => {
+      showToast("Reset link sent to your email 📧");
+    })
+    .catch(() => {
+      showToast("If the email exists, a reset link was sent.");
+    });
+}
+

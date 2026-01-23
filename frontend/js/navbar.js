@@ -36,3 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
       profileNav.classList.add("d-none");
     });
 });
+// ===============================
+// 📍 ACTIVE NAV LINK
+// ===============================
+const currentPath = window.location.pathname;
+
+document.querySelectorAll(".nav-link").forEach(link => {
+  const href = link.getAttribute("href");
+
+  if (href === currentPath || (href === "/" && currentPath === "/index.html")) {
+    link.classList.add("active");
+  }
+});

@@ -22,45 +22,46 @@ fetch("/api/products")
 
 function renderProducts(products) {
   productList.innerHTML = products.map(p => `
-    <div class="col-md-4 mb-3">
-      <div class="card h-100">
-        <img src="${p.image}" class="card-img-top">
-        <div class="card-body">
-          <h5>
-            <a href="/product.html?id=${p._id}">
+    <div class="col-6 col-md-4 col-lg-3 mb-4">
+      <div class="card h-100 shadow-sm">
+
+        <img src="${p.image}"
+             class="card-img-top"
+             alt="${p.name}">
+
+        <div class="card-body d-flex flex-column">
+          <h6 class="card-title">
+            <a href="/product.html?id=${p._id}"
+               class="text-decoration-none text-dark">
               ${p.name}
             </a>
-          </h5>
-          
-<p class="fw-bold text-success fs-5">
-  ₱${p.price}
-</p>
+          </h6>
 
-          <div class="card-body">
-  
+          <p class="fw-bold text-success mb-2">
+            ₱${p.price}
+          </p>
 
-  <button class="btn btn-primary"
-  onclick='addCart(${JSON.stringify(p)})'>
-  Add to Cart
-</button>
+          <button
+            class="btn btn-primary btn-sm w-100 mt-auto"
+            onclick='addCart(${JSON.stringify(p)})'>
+            Add to Cart
+          </button>
 
-
-  <button
-  class="btn btn-sm ms-2 ${wishlistIds.includes(p._id) ? "btn-danger" : "btn-outline-danger"}"
-  onclick="toggleWishlist('${p._id}')"
->
-  ♥
-</button>
-
-</div>
-
-            
+          <button
+            class="btn btn-sm mt-2
+              ${wishlistIds.includes(p._id)
+                ? "btn-danger"
+                : "btn-outline-danger"}"
+            onclick="toggleWishlist('${p._id}')">
+            ♥ Wishlist
           </button>
         </div>
+
       </div>
     </div>
   `).join("");
 }
+
 
 searchInput.addEventListener("input", () => {
   const keyword = searchInput.value.toLowerCase();

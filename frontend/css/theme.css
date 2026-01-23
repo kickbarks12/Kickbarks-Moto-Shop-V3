@@ -1,0 +1,33 @@
+:root {
+  --primary: #0d6efd;
+  --success: #198754;
+  --dark: #212529;
+  --light: #f8f9fa;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+}
+
+.btn-success {
+  background-color: var(--success);
+}
+
+body {
+  background-color: var(--light);
+}
+.btn {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.card {
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}

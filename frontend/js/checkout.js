@@ -1,32 +1,6 @@
-// const cart = JSON.parse(localStorage.getItem("cart")) || [];
-// const checkoutItems = document.getElementById("checkoutItems");
-// const subtotalEl = document.getElementById("subtotal");
-// const voucherUsedEl = document.getElementById("voucherUsed");
-// const finalTotalEl = document.getElementById("finalTotal");
-
-// let subtotal = 0;
-
-// checkoutItems.innerHTML = cart.map(item => {
-//   subtotal += item.price * item.qty;
-//   return `<li class="list-group-item">
-//     ${item.name} × ${item.qty} — ₱${item.price * item.qty}
-//   </li>`;
-// }).join("");
-
-// subtotalEl.innerText = subtotal;
-
-// // const cart = JSON.parse(localStorage.getItem("cart")) || [];
-// // const appliedVoucher = Number(localStorage.getItem("appliedVoucher")) || 0;
-
-// // let subtotal = 0;
-// // cart.forEach(item => {
-// //   subtotal += item.price * item.qty;
-// // });
-
-// // let total = subtotal - appliedVoucher;
-// // if (total < 0) total = 0;
-
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
+const shippingFee = 150;
+const voucherDiscount = Number(localStorage.getItem("appliedVoucher")) || 0;
 
 
 const checkoutItems = document.getElementById("checkoutItems");
@@ -43,8 +17,13 @@ checkoutItems.innerHTML = cart.map(item => {
   </li>`;
 }).join("");
 
-let finalTotal = subtotal
+document.getElementById("shipping").innerText = shippingFee;
+document.getElementById("discount").innerText = voucherDiscount;
+
+let finalTotal = subtotal + shippingFee - voucherDiscount;
 if (finalTotal < 0) finalTotal = 0;
+
+
 
 subtotalEl.innerText = subtotal;
 
@@ -52,21 +31,25 @@ finalTotalEl.innerText = finalTotal;
 
 
 function placeOrder() {
+  const btn = document.getElementById("placeOrderBtn");
+
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  
 
   if (cart.length === 0) {
     showToast("Cart is empty");
     return;
   }
 
+  // 🔒 Lock button
+  btn.disabled = true;
+  btn.innerText = "Processing...";
+
   fetch("/api/orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
-      items: cart,
-      
+      items: cart
     })
   })
     .then(res => {
@@ -75,16 +58,14 @@ function placeOrder() {
     })
     .then(data => {
       localStorage.removeItem("cart");
-      
 
       const earned = Number(data.cashbackEarned);
 
-if (earned > 0) {
-  showToast(`Order placed! You earned ₱${earned} store credit`);
-} else {
-  showToast("Order placed successfully");
-}
-
+      if (earned > 0) {
+        showToast(`Order placed! You earned ₱${earned} store credit`);
+      } else {
+        showToast("Order placed successfully");
+      }
 
       setTimeout(() => {
         window.location.href = "/profile.html";
@@ -93,8 +74,13 @@ if (earned > 0) {
     .catch(err => {
       console.error(err);
       showToast("Failed to place order");
+
+      // 🔓 Unlock only on failure
+      btn.disabled = false;
+      btn.innerText = "Place Order";
     });
 }
+
 
 
 

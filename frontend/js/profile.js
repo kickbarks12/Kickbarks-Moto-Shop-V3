@@ -1,22 +1,4 @@
-// fetch("/api/users/me", { credentials: "include" })
-//   .then(res => {
-//     if (!res.ok) {
-//       window.location.href = "/login.html";
-//       return null;
-//     }
-//     return res.json();
-//   })
-//   .then(user => {
-//     if (!user) return;
 
-//    const nameEl = document.getElementById("profileName");
-//     const emailEl = document.getElementById("profileEmail");
-//     const voucherEl = document.getElementById("profileVouchers");
-
-//     if (nameEl) nameEl.innerText = user.name || "—";
-//     if (emailEl) emailEl.innerText = user.email;
-//     if (voucherEl) voucherEl.innerText = user.vouchers || 0;
-//   });
 document.addEventListener("DOMContentLoaded", () => {
 fetch("/api/users/me", { credentials: "include" })
   .then(res => {
@@ -40,7 +22,8 @@ fetch("/api/users/me", { credentials: "include" })
 
     if (nameEl) nameEl.innerText = user.name;
     if (emailEl) emailEl.innerText = user.email;
-    if (voucherEl) voucherEl.innerText = user.vouchers;
+    if (voucherEl) voucherEl.innerText = 0;
+
   });
 })
 
@@ -58,20 +41,26 @@ fetch("/api/orders", { credentials: "include" })
       return;
     }
 
-    ordersEl.innerHTML = orders.map(o => `
-      <li class="list-group-item">
-  <a href="/order.html?id=${o._id}" class="text-decoration-none text-dark">
-    <strong>₱${o.total}</strong><br>
-    Status:
-    <span class="badge bg-warning text-dark">
-      ${o.status}
-    </span><br>
-    <small>${new Date(o.date).toLocaleString()}</small>
-  </a>
-</li>
+  ordersEl.innerHTML = orders.map(o => {
+  let badgeClass = "bg-warning text-dark";
 
-    `).join("");
-  });
+  if (o.status === "completed") badgeClass = "bg-success";
+  if (o.status === "cancelled") badgeClass = "bg-danger";
+
+  return `
+    <li class="list-group-item">
+      <a href="/order.html?id=${o._id}" class="text-decoration-none text-dark">
+        <strong>₱${o.total}</strong><br>
+        Status:
+        <span class="badge ${badgeClass}">
+          ${o.status}
+        </span><br>
+        <small>${new Date(o.date).toLocaleString()}</small>
+      </a>
+    </li>
+  `;
+}).join("");
+  })
 
 
 function logout() {

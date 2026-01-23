@@ -6,6 +6,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <!-- NAVBAR HERE -->
@@ -28,12 +29,12 @@
             <li class="nav-item">
               <a class="nav-link" href="/shop.html">Shop</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="./cart.html">Cart</a>
-            </li>
+            </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="./checkout.html">
-                Checkout <span class="badge bg-danger" id="cartCount">0</span>
+              <a class="nav-link" href="./cart.html">
+                Cart <span class="badge bg-danger" id="cartCount">0</span>
               </a>
             </li>
 
@@ -55,18 +56,64 @@
     </nav>
 
     <div class="container mt-4">
-      <h2>Checkout</h2>
+      <h2 class="mb-4">Checkout</h2>
 
-      <ul id="checkoutItems" class="list-group mb-3"></ul>
+      <div class="row">
+        <!-- LEFT: ITEMS -->
+        <div class="col-md-7">
+          <ul id="checkoutItems" class="list-group mb-3"></ul>
+        </div>
 
-      <p>Subtotal: ₱<span id="subtotal">0</span></p>
+        <!-- RIGHT: SUMMARY -->
+        <div class="col-md-5">
+          <div class="card p-3 mb-3">
+            <h5 class="fw-bold mb-3">Order Summary</h5>
 
-      <h4>Total: ₱<span id="finalTotal">0</span></h4>
+            <div class="d-flex justify-content-between">
+              <span>Subtotal</span>
+              <span>₱<span id="subtotal">0</span></span>
+            </div>
 
-      <button class="btn btn-success" onclick="placeOrder()">
-        Place Order
-      </button>
+            <div class="d-flex justify-content-between">
+              <span>Shipping</span>
+              <span>₱<span id="shipping">0</span></span>
+            </div>
+
+            <div class="d-flex justify-content-between text-success">
+              <span>Voucher Discount</span>
+              <span>- ₱<span id="discount">0</span></span>
+            </div>
+
+            <hr />
+
+            <div class="d-flex justify-content-between fw-bold fs-5">
+              <span>Total</span>
+              <span>₱<span id="finalTotal">0</span></span>
+            </div>
+          </div>
+
+          <!-- PAYMENT INFO -->
+          <div class="card p-3 mb-3">
+            <h6 class="fw-bold">Payment Method</h6>
+            <p class="mb-1">
+              Secure payment powered by <strong>FortunePay</strong>
+            </p>
+            <small class="text-muted"
+              >🔒 Your payment information is encrypted</small
+            >
+          </div>
+
+          <button
+            class="btn btn-success w-100"
+            id="placeOrderBtn"
+            onclick="placeOrder()"
+          >
+            Place Order
+          </button>
+        </div>
+      </div>
     </div>
+
     <div
       id="toast"
       style="

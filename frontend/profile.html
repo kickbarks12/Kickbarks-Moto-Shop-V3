@@ -6,6 +6,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -27,12 +28,12 @@
             <li class="nav-item">
               <a class="nav-link" href="/shop.html">Shop</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="./cart.html">Cart</a>
-            </li>
+            </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="./checkout.html">
-                Checkout <span class="badge bg-danger" id="cartCount">0</span>
+              <a class="nav-link" href="./cart.html">
+                Cart <span class="badge bg-danger" id="cartCount">0</span>
               </a>
             </li>
 
@@ -52,24 +53,40 @@
         </div>
       </div>
     </nav>
-    <h3 class="mb-3">Welcome, <span id="welcomeName">User</span></h3>
+    <div class="container mt-4">
+      <h3 class="mb-1">Welcome, <span id="welcomeName">User</span></h3>
+      <p class="text-muted mb-4">My Account</p>
 
-    <h2>My Profile</h2>
+      <!-- PROFILE INFO -->
+      <div class="card p-3 mb-4">
+        <h5 class="fw-bold mb-3">Profile Information</h5>
+        <p><strong>Name:</strong> <span id="profileName">—</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">—</span></p>
+        <p>
+          <strong>Store Credits:</strong>
+          ₱<span id="profileVouchers">0</span>
+        </p>
 
-    <p><strong>Name:</strong> <span id="profileName">—</span></p>
-    <p><strong>Email:</strong> <span id="profileEmail">—</span></p>
-    
+        <button class="btn btn-outline-danger mt-2" onclick="logout()">
+          Logout
+        </button>
+      </div>
 
-    <button onclick="logout()">Logout</button>
+      <!-- ORDERS -->
+      <div class="card p-3 mb-4">
+        <h5 class="fw-bold mb-3">Order History</h5>
+        <ul id="orders" class="list-group list-group-flush"></ul>
+      </div>
 
-    <h3>Order History</h3>
-    <ul id="orders" class="list-group"></ul>
-    <h3 class="mt-4">Wishlist</h3>
-    <ul id="wishlist" class="list-group"></ul>
+      <!-- WISHLIST -->
+      <div class="card p-3 mb-4">
+        <h5 class="fw-bold mb-3">Wishlist</h5>
+        <ul id="wishlist" class="list-group list-group-flush"></ul>
+      </div>
+    </div>
 
     <script src="/js/auth-guard.js"></script>
     <script src="js/profile.js"></script>
     <script src="/js/navbar.js"></script>
-    
   </body>
 </html>

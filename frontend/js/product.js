@@ -23,12 +23,15 @@ fetch(`/api/products/${id}`)
 function add() {
   if (!product) return;
 
+  const qty = Number(document.getElementById("qty").value) || 1;
+
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   const found = cart.find(i => i._id === product._id);
 
-  if (found) found.qty += 1;
-  else cart.push({ ...product, qty: 1 });
+  if (found) found.qty += qty;
+  else cart.push({ ...product, qty });
 
   localStorage.setItem("cart", JSON.stringify(cart));
   showToast("Added to cart");
 }
+
