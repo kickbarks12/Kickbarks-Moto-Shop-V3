@@ -68,7 +68,9 @@ function placeOrder() {
       }
 
       setTimeout(() => {
-        window.location.href = "/profile.html";
+       window.location.href =
+  `/order-success.html?id=${data.orderId}`;
+
       }, 1200);
     })
     .catch(err => {

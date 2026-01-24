@@ -2,6 +2,9 @@ const express = require("express");
 const Order = require("../models/Order");
 const User = require("../models/User");
 const router = express.Router();
+const sendReceiptEmail = require("../utils/sendReceiptEmail");
+const generateReceiptPDF = require("../utils/generateReceiptPDF");
+
 
 router.post("/", async (req, res) => {
   try {
@@ -34,21 +37,24 @@ router.post("/", async (req, res) => {
 
     // 4️⃣ Create order
     const order = await Order.create({
+      
       userId: user._id,
       items,
       total: finalTotal,
       status: "Pending",
       date: new Date()
     });
+sendReceiptEmail(order, user.email);
 
     res.json({
       success: true,
-      order,
+      orderId: order._id,
       finalTotal
     });
   } catch (err) {
     console.error("ORDER ERROR:", err);
     res.status(500).json({ error: "Order processing failed" });
+    
   }
 });
 
@@ -70,6 +76,21 @@ router.get("/:id", async (req, res) => {
   if (!order) return res.status(404).end();
 
   res.json(order);
+});
+router.get("/:id/receipt", async (req, res) => {
+  const { id } = req.params;
+
+  if (!id || id === "undefined") {
+    return res.status(400).send("Invalid order ID");
+  }
+
+  const order = await Order.findById(id);
+
+  if (!order) {
+    return res.status(404).send("Order not found");
+  }
+
+  generateReceiptPDF(order, res);
 });
 
 module.exports = router;

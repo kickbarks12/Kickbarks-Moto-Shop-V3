@@ -72,7 +72,7 @@ function login(e) {
       if (data.token) {
         localStorage.setItem("token", data.token);
       }
-      window.location.href = "/profile.html";
+      window.location.href = "/index.html";
     })
     .catch(err => {
       alert(err.message);

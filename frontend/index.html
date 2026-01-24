@@ -12,7 +12,10 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="/">🏍️ Kickbarks Moto Shop</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+          <img src="" alt="Kickbarks" height="32" />
+          <span class="fw-bold">Kickbarks Moto Shop</span>
+        </a>
 
         <button
           class="navbar-toggler"
@@ -52,6 +55,12 @@
             </li>
           </ul>
         </div>
+        <button
+          class="btn btn-sm btn-outline-light ms-3"
+          onclick="toggleTheme()"
+        >
+          🌙
+        </button>
       </div>
     </nav>
     <!-- HERO SECTION -->
@@ -60,11 +69,14 @@
         <div class="row align-items-center">
           <!-- HERO TEXT -->
           <div class="col-md-6 mb-4 mb-md-0">
-            <h1 class="fw-bold display-5">Kickbarks Moto Shop</h1>
-            <p class="text-muted fs-5 mt-3">
-              Quality motorcycle parts and accessories. Shop easily and pay
-              securely with FortunePay.
+            <h1 class="fw-bold mb-3 hero-animate">
+              Ride Better with Kickbarks Moto Shop
+            </h1>
+
+            <p class="text-muted hero-animate" style="animation-delay: 0.1s">
+              Quality motorcycle parts, accessories, and gear.
             </p>
+
             <a href="/shop.html" class="btn btn-primary btn-lg mt-3">
               Shop Now
             </a>
@@ -103,8 +115,9 @@
         <div class="row text-center text-md-start">
           <div class="col-md-4 mb-3">
             <h5>Kickbarks Moto Shop</h5>
-            <p class="small text-muted">
-              Quality motorcycle parts and accessories.
+            <p style="font-size: 13px; color: #6c757d; margin: 0">
+              Thank you for trusting Kickbarks Moto Shop.<br />
+              Keep riding safe and strong 🏍️
             </p>
           </div>
 
@@ -131,5 +144,18 @@
     <script src="/js/ui.js"></script>
     <script src="/js/welcome.js"></script>
     <script src="/js/featured.js"></script>
+    <script>
+      function toggleTheme() {
+        document.body.classList.toggle("dark");
+        localStorage.setItem(
+          "theme",
+          document.body.classList.contains("dark") ? "dark" : "light",
+        );
+      }
+
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+      }
+    </script>
   </body>
 </html>
