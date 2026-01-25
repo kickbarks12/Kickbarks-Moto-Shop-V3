@@ -33,3 +33,18 @@ function showToast(msg) {
     toast.style.display = "none";
   }, 2000);
 }
+function setButtonLoading(btn, loading = true) {
+  if (!btn) return;
+
+  if (loading) {
+    btn.disabled = true;
+    btn.dataset.originalText = btn.innerHTML;
+    btn.innerHTML = `
+      <span class="spinner-border spinner-border-sm me-2"></span>
+      Processing...
+    `;
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btn.dataset.originalText;
+  }
+}

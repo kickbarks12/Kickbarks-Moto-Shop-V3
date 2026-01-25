@@ -10,19 +10,73 @@ fetch("/api/users/me", { credentials: "include" })
   })
   .then(user => {
     if (!user) return;
+// Render addresses
+const addressList = document.getElementById("addressList");
+
+if (addressList) {
+  if (!user.addresses || user.addresses.length === 0) {
+    addressList.innerHTML = `
+      <li class="list-group-item text-center text-muted">
+        No addresses saved
+      </li>`;
+  } else {
+    addressList.innerHTML = user.addresses.map((a, i) => `
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div>
+          <strong>${a.label || "Address"}</strong><br>
+          ${a.street}, ${a.city}<br>
+          ${a.province || ""} ${a.zip || ""}
+        </div>
+        <button class="btn btn-sm btn-outline-danger"
+          onclick="deleteAddress(${i})">
+          ✕
+        </button>
+      </li>
+    `).join("");
+  }
+}
+
+
 
     // Profile fields
     document.getElementById("welcomeName").innerText = user.name;
     const nameEl = document.getElementById("profileName");
     const emailEl = document.getElementById("profileEmail");
     const voucherEl = document.getElementById("profileVouchers");
+const mobileEl = document.getElementById("profileMobile");
+const birthdayEl = document.getElementById("profileBirthday");
+
 
     console.log("PROFILE USER:", user);
-      console.log("NAME ELEMENT:", nameEl);
+      
 
     if (nameEl) nameEl.innerText = user.name;
     if (emailEl) emailEl.innerText = user.email;
-    if (voucherEl) voucherEl.innerText = 0;
+    if (voucherEl) voucherEl.innerText = user.vouchers ?? 0;
+
+
+
+if (mobileEl) {
+  mobileEl.innerText =
+    user.mobile !== null && user.mobile !== undefined && user.mobile !== ""
+      ? user.mobile
+      : "—";
+}
+
+
+if (birthdayEl) {
+  birthdayEl.innerText = user.birthday
+    ? new Date(user.birthday).toLocaleDateString()
+    : "—";
+}
+
+if (mobileEl) {
+  mobileEl.innerText =
+    user.mobile !== null && user.mobile !== undefined && user.mobile !== ""
+      ? user.mobile
+      : "—";
+}
+
 
   });
 })
@@ -126,3 +180,28 @@ function removeWishlist(productId) {
     .then(() => location.reload());
 }
 
+document.getElementById("addressForm")?.addEventListener("submit", e => {
+  e.preventDefault();
+
+  fetch("/api/users/addresses", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      label: document.getElementById("addrLabel").value,
+      street: document.getElementById("addrStreet").value,
+      city: document.getElementById("addrCity").value,
+      province: document.getElementById("addrProvince").value,
+      zip: document.getElementById("addrZip").value
+    })
+  })
+    .then(res => res.json())
+    .then(() => location.reload());
+});
+function deleteAddress(index) {
+  fetch(`/api/users/addresses/${index}`, {
+    method: "DELETE",
+    credentials: "include"
+  })
+    .then(() => location.reload());
+}

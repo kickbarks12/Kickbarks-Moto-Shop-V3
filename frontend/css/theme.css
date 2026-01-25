@@ -157,3 +157,15 @@ body.dark footer {
 .hero-animate {
   animation: fadeUp 0.6s ease both;
 }
+body.dark .navbar {
+  background-color: #000;
+}
+
+body.dark .btn-outline-secondary {
+  color: #ddd;
+  border-color: #444;
+}
+
+body.dark .text-muted {
+  color: #aaa !important;
+}
