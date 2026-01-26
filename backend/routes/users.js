@@ -8,7 +8,12 @@ router.get("/me", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const user = await User.findById(req.session.userId);
+    const user = await User.findById(req.session.userId)
+      .select("-password");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     res.json(user);
   } catch (err) {
@@ -16,6 +21,7 @@ router.get("/me", async (req, res) => {
     res.status(500).json({ error: "Failed to load profile" });
   }
 });
+
 // ADD ADDRESS
 router.post("/addresses", async (req, res) => {
   try {
@@ -101,7 +107,13 @@ router.delete("/addresses/:index", async (req, res) => {
 
 // ADD / REMOVE WISHLIST
 router.post("/wishlist/:productId", async (req, res) => {
-  if (!req.session.userId) return res.status(401).end();
+  if (!req.session.userId) {
+  return res.status(401).json({
+    success: false,
+    message: "Unauthorized"
+  });
+}
+
 
   const user = await User.findById(req.session.userId);
   const productId = req.params.productId;
@@ -120,7 +132,13 @@ router.post("/wishlist/:productId", async (req, res) => {
 
 // GET WISHLIST
 router.get("/wishlist", async (req, res) => {
-  if (!req.session.userId) return res.status(401).end();
+  if (!req.session.userId) {
+  return res.status(401).json({
+    success: false,
+    message: "Unauthorized"
+  });
+}
+
 
   const user = await User.findById(req.session.userId)
     .populate("wishlist");
@@ -130,7 +148,13 @@ router.get("/wishlist", async (req, res) => {
 
 // GET WISHLIST IDS ONLY
 router.get("/wishlist-ids", async (req, res) => {
-  if (!req.session.userId) return res.json([]);
+  if (!req.session.userId) {
+  return res.status(401).json({
+    success: false,
+    message: "Unauthorized"
+  });
+}
+
 
   const user = await User.findById(req.session.userId);
   res.json(user.wishlist.map(id => id.toString()));

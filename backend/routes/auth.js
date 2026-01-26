@@ -7,15 +7,14 @@ const router = express.Router();
 // SIGNUP
 router.post("/signup", async (req, res) => {
   try {
-    console.log("SIGNUP BODY RECEIVED:", req.body);
+    
     const {
       name,
       email,
       password,
       mobile,
       birthday,
-      
-    } = req.body;
+     } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
@@ -34,7 +33,6 @@ router.post("/signup", async (req, res) => {
       password: hashed,
       mobile,
       birthday,
-    
       vouchers: 100
     });
 
@@ -80,13 +78,5 @@ router.post("/logout", (req, res) => {
   });
 });
 
-
-
-// LOGOUT
-router.post("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.json({ success: true });
-  });
-});
 
 module.exports = router;

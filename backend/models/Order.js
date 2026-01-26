@@ -22,7 +22,24 @@ const OrderSchema = new mongoose.Schema({
   items: Array,
   total: Number,
   status: String,
-  date: Date
+  date: Date,
+
+  refundStatus: {
+  type: String,
+  enum: ["None", "Requested", "Refunded"],
+  default: "None"
+},
+refundAmount: {
+  type: Number,
+  default: 0
+},
+refundDate: {
+  type: Date
+},
+refundReason: {
+  type: String
+}
+
 });
 
 module.exports = mongoose.model("Order", OrderSchema);

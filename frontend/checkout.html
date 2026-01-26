@@ -14,7 +14,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-          <img src="" alt="Kickbarks" height="32" />
+          <img src="./images/logo.png" alt="Kickbarks" class="navbar-logo" />
           <span class="fw-bold">Kickbarks Moto Shop</span>
         </a>
 
@@ -66,17 +66,20 @@
     </nav>
 
     <div class="container mt-4">
-      <h2 class="mb-4">Checkout</h2>
+      <div class="mb-4">
+        <h2 class="fw-bold mb-1">Checkout</h2>
+        <p class="text-muted mb-0">Review your items and confirm your order</p>
+      </div>
 
       <div class="row">
         <!-- LEFT: ITEMS -->
         <div class="col-md-7">
-          <ul id="checkoutItems" class="list-group mb-3"></ul>
+          <ul id="checkoutItems" class="list-group list-group-flush mb-3"></ul>
         </div>
 
         <!-- RIGHT: SUMMARY -->
         <div class="col-md-5">
-          <div class="card p-3 mb-3">
+          <div class="card p-3 mb-3 shadow-sm">
             <h5 class="fw-bold mb-3">Order Summary</h5>
 
             <div class="d-flex justify-content-between">
@@ -96,25 +99,26 @@
 
             <hr />
 
-            <div class="d-flex justify-content-between fw-bold fs-5">
+            <div class="d-flex justify-content-between fw-bold fs-4 mt-2">
               <span>Total</span>
               <span>₱<span id="finalTotal">0</span></span>
             </div>
           </div>
 
           <!-- PAYMENT INFO -->
-          <div class="card p-3 mb-3">
-            <h6 class="fw-bold">Payment Method</h6>
+          <div class="card p-3 mb-4 shadow-sm">
+            <h6 class="fw-bold mb-2">💳 Payment Method</h6>
+
             <p class="mb-1">
               Secure payment powered by <strong>FortunePay</strong>
             </p>
-            <small class="text-muted"
-              >🔒 Your payment information is encrypted</small
-            >
+            <small class="text-muted">
+              🔒 Your payment information is encrypted and protected
+            </small>
           </div>
 
           <button
-            class="btn btn-success w-100"
+            class="btn btn-success btn-lg w-100"
             id="placeOrderBtn"
             onclick="placeOrder()"
           >
@@ -126,16 +130,18 @@
 
     <div
       id="toast"
+      class="shadow"
       style="
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background: #333;
+        background: #212529;
         color: #fff;
         padding: 12px 20px;
-        border-radius: 5px;
+        border-radius: 8px;
         display: none;
         z-index: 9999;
+        font-size: 14px;
       "
     ></div>
 

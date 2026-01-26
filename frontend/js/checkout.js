@@ -1,7 +1,13 @@
+
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 const shippingFee = 150;
-const voucherDiscount = Number(localStorage.getItem("appliedVoucher")) || 0;
+// const voucherDiscount = Number(localStorage.getItem("appliedVoucher")) || 0;
 
+  const savedVoucher =
+  JSON.parse(sessionStorage.getItem("voucher")) || null;
+
+let voucherDiscount = savedVoucher ? savedVoucher.discount : 0;
+let voucherCode = savedVoucher ? savedVoucher.code : null;
 
 const checkoutItems = document.getElementById("checkoutItems");
 const subtotalEl = document.getElementById("subtotal");
@@ -18,10 +24,11 @@ checkoutItems.innerHTML = cart.map(item => {
 }).join("");
 
 document.getElementById("shipping").innerText = shippingFee;
-document.getElementById("discount").innerText = voucherDiscount;
+
 
 let finalTotal = subtotal + shippingFee - voucherDiscount;
 if (finalTotal < 0) finalTotal = 0;
+document.getElementById("discount").innerText = voucherDiscount;
 
 
 
@@ -49,8 +56,10 @@ function placeOrder() {
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
-      items: cart
-    })
+  items: cart,
+  voucher: voucherCode
+})
+
   })
     .then(res => {
       if (!res.ok) throw new Error("Order failed");
@@ -58,6 +67,8 @@ function placeOrder() {
     })
     .then(data => {
       localStorage.removeItem("cart");
+      sessionStorage.removeItem("voucher");
+
 
       const earned = Number(data.cashbackEarned);
 

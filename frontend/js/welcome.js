@@ -3,20 +3,33 @@ document.addEventListener("DOMContentLoaded", () => {
   if (sessionStorage.getItem("welcomeShown")) return;
 
   fetch("/api/users/me", { credentials: "include" })
-    .then(res => res.ok ? res.json() : null)
+    .then(res => (res.ok ? res.json() : null))
     .then(user => {
-      if (user) {
-        document.getElementById("welcomeTitle").innerText =
-          `Welcome back, ${user.name}!`;
-        document.getElementById("welcomeMessage").innerText =
+      if (!user) return;
+
+      const titleEl = document.getElementById("welcomeTitle");
+      const messageEl = document.getElementById("welcomeMessage");
+
+      if (titleEl) {
+        titleEl.innerText = `Welcome back, ${user.name}!`;
+      }
+
+      if (messageEl) {
+        messageEl.innerText =
           "Glad to see you again at Kickbarks Moto Shop 🏍️";
       }
     })
     .finally(() => {
-      const modal = new bootstrap.Modal(
-        document.getElementById("welcomeModal")
-      );
-      modal.show();
+      const modalEl = document.getElementById("welcomeModal");
+
+      if (modalEl && window.bootstrap && bootstrap.Modal) {
+        const modal = new bootstrap.Modal(modalEl, {
+          backdrop: true,
+          keyboard: true
+        });
+        modal.show();
+      }
+
       sessionStorage.setItem("welcomeShown", "true");
     });
 });

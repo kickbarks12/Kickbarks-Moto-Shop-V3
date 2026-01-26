@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-          <img src="" alt="Kickbarks" height="32" />
+          <img src="./images/logo.png" alt="Kickbarks" class="navbar-logo" />
           <span class="fw-bold">Kickbarks Moto Shop</span>
         </a>
 
@@ -72,45 +72,61 @@
     </div>
 
     <div class="container mt-4">
-      <h2>Shop</h2>
-      <div class="card mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold mb-0">Shop</h2>
+        <span class="text-muted small" id="productCount"></span>
+      </div>
+
+      <div class="card mb-4 shadow-sm">
         <div class="card-body">
-          <div class="row g-3">
+          <div class="row g-3 align-items-center">
             <div class="col-12 col-md-6">
+              <label class="form-label small text-muted">
+                🔍 Search products
+              </label>
               <input
                 type="text"
                 id="searchInput"
                 class="form-control form-control-lg"
-                placeholder="Search products..."
+                placeholder="Search parts, accessories, gear..."
               />
             </div>
 
             <div class="col-12 col-md-6">
+              <label class="form-label small text-muted">
+                💰 Sort by price
+              </label>
               <select id="priceFilter" class="form-select form-select-lg">
-                <option value="">Sort by price</option>
-                <option value="low">Low to High</option>
-                <option value="high">High to Low</option>
+                <option value="">Default</option>
+                <option value="low">Low → High</option>
+                <option value="high">High → Low</option>
               </select>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row" id="productList"></div>
+      <div class="row g-4" id="productList">
+        <div class="col-12 text-center text-muted py-5" id="productLoading">
+          Loading products…
+        </div>
+      </div>
     </div>
     <!-- TOAST -->
     <div
       id="toast"
+      class="shadow"
       style="
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background: #333;
+        background: #212529;
         color: #fff;
         padding: 12px 20px;
-        border-radius: 5px;
+        border-radius: 8px;
         display: none;
         z-index: 9999;
+        font-size: 14px;
       "
     ></div>
 

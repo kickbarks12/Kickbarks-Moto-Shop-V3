@@ -1,20 +1,3 @@
-// function signup() {
-//   fetch("http://localhost:4000/api/auth/signup", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     credentials: "include",
-//     body: JSON.stringify({
-//       name: name.value,
-//       email: email.value,
-//       password: password.value
-//     })
-//   })
-//     .then(res => res.json())
-//     .then(() => {
-//       location.href = "profile.html";
-//     });
-// }
-
 function signup(e) {
   e.preventDefault();
 
@@ -34,6 +17,10 @@ function signup(e) {
     age--;
   }
 
+  const btn = e.target.querySelector("button");
+setButtonLoading(btn, true);
+
+
   fetch("http://localhost:4000/api/auth/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -47,8 +34,11 @@ function signup(e) {
       age
     })
   })
+  
+
     .then(res => res.json())
     .then(data => {
+      setButtonLoading(btn, false);
       if (data.error || data.msg) {
         alert(data.error || data.msg);
         return;
@@ -57,8 +47,11 @@ function signup(e) {
       alert("Account created successfully!");
       window.location.href = "/login.html";
     })
+    
+
     .catch(err => {
       console.error(err);
+      setButtonLoading(btn, false);
       alert("Signup failed");
     });
 }
@@ -69,6 +62,10 @@ function login(e) {
 
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
+
+  const btn = e.target.querySelector("button");
+setButtonLoading(btn, true);
+
 
   fetch("http://localhost:4000/api/auth/login", {
     method: "POST",
@@ -85,13 +82,10 @@ function login(e) {
       }
       return res.json();
     })
-    .then(data => {
-      // store token IF backend sends one
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
-      window.location.href = "/index.html";
-    })
+    .then(() => {
+  window.location.href = "/index.html";
+})
+
     .catch(err => {
       alert(err.message);
     });
@@ -100,6 +94,10 @@ function requestReset(e) {
   e.preventDefault();
 
   const email = document.getElementById("email").value;
+
+  const btn = e.target.querySelector("button");
+setButtonLoading(btn, true);
+
 
   fetch("/api/auth/forgot-password", {
     method: "POST",

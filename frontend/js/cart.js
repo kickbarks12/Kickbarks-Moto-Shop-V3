@@ -1,3 +1,6 @@
+let appliedVoucher = null;
+let voucherDiscount = 0;
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const cartList = document.getElementById("cartList");
@@ -6,13 +9,19 @@ const totalEl = document.getElementById("total");
 function renderCart() {
   let total = 0;
 
-  if (cart.length === 0) {
-    cartList.innerHTML = `<li class="list-group-item text-center">
-      Your cart is empty
-    </li>`;
-    totalEl.innerText = 0;
-    return;
-  }
+if (cart.length === 0) {
+  cartList.innerHTML = `<li class="list-group-item text-center">
+    Your cart is empty
+  </li>`;
+
+  appliedVoucher = null;
+  voucherDiscount = 0;
+  sessionStorage.removeItem("voucher");
+
+  updateSummary();
+  return;
+}
+
 
   cartList.innerHTML = cart.map((item, index) => {
     total += item.price * item.qty;
@@ -32,8 +41,19 @@ function renderCart() {
     `;
   }).join("");
 
-  totalEl.innerText = total;
+  updateSummary();
+
 }
+// Restore voucher from sessionStorage (if any)
+const savedVoucher = JSON.parse(sessionStorage.getItem("voucher"));
+
+if (savedVoucher) {
+  appliedVoucher = savedVoucher.code;
+  voucherDiscount = savedVoucher.discount;
+  document.getElementById("voucherMessage").innerText =
+    `Voucher applied: -₱${voucherDiscount}`;
+}
+
 
 function changeQty(index, change) {
   cart[index].qty += change;
@@ -53,3 +73,77 @@ function removeItem(index) {
 }
 
 renderCart();
+
+function calculateSubtotal() {
+  return cart.reduce((sum, item) => {
+    return sum + item.price * item.qty;
+  }, 0);
+}
+function updateSummary() {
+  const subtotal = calculateSubtotal();
+  const shipping = 0; // keep 0 for now, or adjust later
+
+  let total = subtotal + shipping - voucherDiscount;
+  if (total < 0) total = 0;
+
+  document.getElementById("subtotal").innerText = subtotal;
+  document.getElementById("shipping").innerText = shipping;
+  document.getElementById("discount").innerText = voucherDiscount;
+  document.getElementById("total").innerText = total;
+}
+
+updateSummary();
+
+document
+  .getElementById("applyVoucherBtn")
+  ?.addEventListener("click", applyVoucher);
+
+
+
+function applyVoucher() {
+  const code = document.getElementById("voucherInput").value.trim();
+  const messageEl = document.getElementById("voucherMessage");
+
+  if (!code) {
+    messageEl.innerText = "Please enter a voucher code";
+    return;
+  }
+
+  fetch("/api/vouchers/apply", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      code,
+      subtotal: calculateSubtotal()
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.valid) {
+        messageEl.innerText = data.message;
+        appliedVoucher = null;
+        voucherDiscount = 0;
+        sessionStorage.removeItem("voucher");
+        updateSummary();
+        return;
+      }
+
+      appliedVoucher = data.code;
+      voucherDiscount = data.discount;
+
+      sessionStorage.setItem(
+        "voucher",
+        JSON.stringify({
+          code: data.code,
+          discount: data.discount
+        })
+      );
+
+      messageEl.innerText = `Voucher applied: -₱${data.discount}`;
+      updateSummary();
+    })
+    .catch(() => {
+      messageEl.innerText = "Failed to apply voucher";
+    });
+}

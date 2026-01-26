@@ -11,14 +11,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
 
 app.use(
   session({
-    secret: "kickbarks_secret",
+    name: "kickbarks.sid",
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
   })
 );
+
 
 
 
@@ -28,6 +37,8 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/products", require("./routes/products"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/users"));
+app.use("/api/vouchers", require("./routes/vouchers"));
+
 
 
 // Serve frontend
@@ -43,6 +54,17 @@ app.get("/", (req, res) => {
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
+
+  // GLOBAL ERROR HANDLER (must be after all routes)
+app.use((err, req, res, next) => {
+  console.error("🔥 UNHANDLED ERROR:", err);
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: "Something went wrong. Please try again."
+  });
+});
+
 
 const PORT = 4000;
 app.listen(PORT, () => {
