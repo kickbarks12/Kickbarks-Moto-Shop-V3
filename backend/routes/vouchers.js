@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const express = require("express");
-const Voucher = require("../models/Voucher");
+const Voucher = require("../model/Voucher");
 const router = express.Router();
 
 router.post("/apply", async (req, res) => {

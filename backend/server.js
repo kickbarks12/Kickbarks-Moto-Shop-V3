@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const cors = require("cors");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
@@ -11,7 +12,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.set("trust proxy", 1);
+
+
+
+
 
 app.use(
   session({
@@ -31,13 +37,14 @@ app.use(
 
 
 
-
+const adminRoutes = require("./routes/adminRoutes");
 // API routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/products", require("./routes/products"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/vouchers", require("./routes/vouchers"));
+app.use("/api/admin", adminRoutes);
 
 
 

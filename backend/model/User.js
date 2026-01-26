@@ -26,6 +26,12 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
 
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user"
+  },
+
   mobile: {
     type: String,
     default: ""
@@ -34,8 +40,6 @@ const UserSchema = new mongoose.Schema({
   birthday: {
     type: Date
   },
-
-  
 
   addresses: {
   type: [AddressSchema],

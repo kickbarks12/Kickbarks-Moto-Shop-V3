@@ -1,11 +1,11 @@
 const express = require("express");
-const Order = require("../models/Order");
-const User = require("../models/User");
+const Order = require("../model/Order");
+const User = require("../model/User");
 const router = express.Router();
 const sendReceiptEmail = require("../utils/sendReceiptEmail");
 const generateReceiptPDF = require("../utils/generateReceiptPDF");
 const sendRefundEmail = require("../utils/sendRefundEmail");
-const Voucher = require("../models/Voucher");
+const Voucher = require("../model/Voucher");
 
 
 
